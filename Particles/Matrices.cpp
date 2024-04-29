@@ -1,6 +1,6 @@
 #include "Matrices.h"
 
-namespace Matrices 
+namespace Matrices
 {
     Matrix::Matrix(int _rows, int _cols)
     {
@@ -14,15 +14,9 @@ namespace Matrices
     }
     ///Add each corresponding element.
     ///usage:  c = a + b;
-    
+
     Matrix operator+(const Matrix& a, const Matrix& b)
     {
-        /*
-        if (a.getCols() != b.getCols() || a.getRows() != a.getRows()) 
-        { 
-            throw runtime_error("Error: dimensions must agree"); 
-        }
-        */
         Matrix c(a.getRows(), a.getCols());
         for (int i = 0; i < a.getRows(); i++)
         {
@@ -33,18 +27,12 @@ namespace Matrices
         }
         return c;
     }
-    
+
 
     ///Matrix multiply.  See description.
     ///usage:  c = a * b;
     Matrix operator*(const Matrix& a, const Matrix& b)
     {
-        /*
-        if (a.getCols() != b.getRows())
-        {
-            throw runtime_error("Error: dimensions must agree");
-        }
-        */
         Matrix c(a.getRows(), b.getCols());
         for (int k = 0; k < b.getCols(); k++)
         {
@@ -65,12 +53,12 @@ namespace Matrices
     ///usage:  a == b
     bool operator==(const Matrix& a, const Matrix& b)
     {
-        
+
         if (a.getCols() != b.getCols() || a.getRows() != b.getRows())
         {
             return false;
         }
-        
+
         for (int i = 0; i < a.getRows(); i++)
         {
             for (int j = 0; j < a.getCols(); j++)
@@ -101,5 +89,33 @@ namespace Matrices
             os << endl;
         }
         return os;
+    }
+
+    RotationMatrix::RotationMatrix(double theta) : Matrix(2, 2)
+    {
+        this->operator()(0, 0) = static_cast<double>(cos(theta));
+        this->operator()(0, 1) = -sin(theta);
+        this->operator()(1, 0) = sin(theta);
+        this->operator()(1, 1) = cos(theta);
+    }
+
+    ScalingMatrix::ScalingMatrix(double scale) : Matrix(2, 2)
+    {
+        this->operator()(0, 0) = scale;
+        this->operator()(0, 1) = 0;
+        this->operator()(1, 0) = 0;
+        this->operator()(1, 1) = scale;
+    }
+
+    TranslationMatrix::TranslationMatrix(double xShift, double yShift, int nCols) : Matrix(2, nCols)
+    {
+        for (int i = 0; i < nCols; i++)
+        {
+            this->operator()(0, i) = xShift;
+        }
+        for (int i = 0; i < nCols; i++)
+        {
+            this->operator()(1, i) = yShift;
+        }
     }
 }
