@@ -112,9 +112,6 @@ namespace Matrices
         for (int i = 0; i < nCols; i++)
         {
             this->operator()(0, i) = xShift;
-        }
-        for (int i = 0; i < nCols; i++)
-        {
             this->operator()(1, i) = yShift;
         }
     }
