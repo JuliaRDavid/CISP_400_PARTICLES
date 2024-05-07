@@ -93,7 +93,7 @@ namespace Matrices
 
     RotationMatrix::RotationMatrix(double theta) : Matrix(2, 2)
     {
-        this->operator()(0, 0) = static_cast<double>(cos(theta));
+        this->operator()(0, 0) = cos(theta);
         this->operator()(0, 1) = -sin(theta);
         this->operator()(1, 0) = sin(theta);
         this->operator()(1, 1) = cos(theta);
