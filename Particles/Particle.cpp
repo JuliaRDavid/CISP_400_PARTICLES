@@ -10,6 +10,7 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_cartesianPlane.setSize(target.getSize().x, (-1.0) * target.getSize().y);
     m_centerCoordinate = target.mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
 
+    // set pixel velocities
     int vx = rand() % 401 + 100;
     if (vx % 2 == 0)
     {
@@ -20,17 +21,21 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
         m_vx = vx;
     }
     m_vy = rand() % 401 + 100;
-    m_color1 = Color{ 0, 0, 0 };
+    m_color1 = Color{ 0, 0, 0 };  // white
     m_color2 = Color{ static_cast<Uint8>(rand() % 256), static_cast<Uint8>(rand() % 256), static_cast<Uint8>(rand() % 256) };
 
+    // generate numPoint vertices
+    // looked up how to get random num as a float
     float theta = static_cast<float>(rand()) / static_cast<float>( (RAND_MAX / (M_PI / 2)));
+    //cout << theta << endl;
     float dTheta = 2 * M_PI / (numPoints - 1);
 
-    for (int j = 0; j < numPoints; j++)
+    for (int j = 0; j < numPoints; j++) // loop through each vertex
     {
         float r = rand() % 61 + 20;
         float dx = r * cos(theta);
         float dy = r * sin(theta);
+        // fill out m_A matrix with vertices
         m_A(0, j) = m_centerCoordinate.x + dx;
         m_A(1, j) = m_centerCoordinate.y + dy;
         theta += dTheta;
@@ -38,9 +43,9 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
 }
 void Particle::draw(RenderTarget& target, RenderStates states) const 
 {
+    // use TriangleFan (set of triangles connected to a center point) to draw the shape
     VertexArray lines(TriangleFan, m_numPoints + 1);
-    Vector2f center = { static_cast<float>(target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane).x),
-                        static_cast<float>(target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane).y) };
+    Vector2f center = Vector2f(target.mapCoordsToPixel(m_centerCoordinate, m_cartesianPlane)); 
     lines[0].position = center;
     lines[0].color = m_color1;
 
@@ -48,8 +53,8 @@ void Particle::draw(RenderTarget& target, RenderStates states) const
     {
         float x = m_A(0, j - 1);
         float y = m_A(1, j - 1);
-        lines[j].position = { static_cast<float>(target.mapCoordsToPixel({ x, y }, m_cartesianPlane).x),
-                                static_cast<float>(target.mapCoordsToPixel({ x, y }, m_cartesianPlane).y) };
+        // convert from Cartesian Matrix to TriangleFan
+        lines[j].position = Vector2f(target.mapCoordsToPixel({ x, y }, m_cartesianPlane));
         lines[j].color = m_color2;
     }
     target.draw(lines);
