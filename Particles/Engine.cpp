@@ -37,7 +37,7 @@ void Engine::input()
 		{
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
-				for (int i = 0; i < 5; i++)
+				for (int i = 0; i < 15; i++)
 				{
 					Particle p(m_Window, rand() % 25 + 25, Mouse::getPosition(m_Window));
 					m_particles.push_back(p);
