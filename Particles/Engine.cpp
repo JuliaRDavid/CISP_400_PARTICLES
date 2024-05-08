@@ -15,8 +15,7 @@ void Engine::run()
 
 	while (m_Window.isOpen())
 	{
-		ttpf.restart();
-		Time sec = ttpf.getElapsedTime();
+		Time sec = ttpf.restart();
 
 		input();
 		update(sec.asSeconds());

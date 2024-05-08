@@ -9,6 +9,9 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
     m_cartesianPlane.setCenter(0, 0);
     m_cartesianPlane.setSize(target.getSize().x, (-1.0) * target.getSize().y);
     m_centerCoordinate = target.mapPixelToCoords(mouseClickPosition, m_cartesianPlane);
+    //m_centerCoordinate = target.mapPixelToCoords({50, 50}, m_cartesianPlane);
+     cout << mouseClickPosition.x << ", " << mouseClickPosition.y << endl;
+     cout << m_centerCoordinate.x << ", " << m_centerCoordinate.y << endl;
 
     // set pixel velocities
     int vx = rand() % 401 + 100;
@@ -21,7 +24,7 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
         m_vx = vx;
     }
     m_vy = rand() % 401 + 100;
-    m_color1 = Color{ 0, 0, 0 };  // white
+    m_color1 = Color{ static_cast<Uint8>(255), static_cast<Uint8>(255), static_cast<Uint8>(255) };  // white
     m_color2 = Color{ static_cast<Uint8>(rand() % 256), static_cast<Uint8>(rand() % 256), static_cast<Uint8>(rand() % 256) };
 
     // generate numPoint vertices
@@ -40,6 +43,7 @@ Particle::Particle(RenderTarget& target, int numPoints, Vector2i mouseClickPosit
         m_A(1, j) = m_centerCoordinate.y + dy;
         theta += dTheta;
     }
+    //cout << "m_stuff " << m_vx << ", " << m_vy << endl;
 }
 void Particle::draw(RenderTarget& target, RenderStates states) const 
 {
@@ -70,6 +74,8 @@ void Particle::update(float dt)
     m_vy -= G * dt;
     dy = m_vy * dt;
     translate(dx, dy);
+    //cout << "dx " << dx << endl;
+    cout << "center " << m_centerCoordinate.x << ", " << m_centerCoordinate.y << endl;
 }
 
 
@@ -239,6 +245,8 @@ void Particle::scale(double c)
 
     ScalingMatrix S(c);
     m_A = S * m_A;
+    
+    translate(temp.x, temp.y);
 }
 
 ///shift the Particle by (xShift, yShift) coordinates
