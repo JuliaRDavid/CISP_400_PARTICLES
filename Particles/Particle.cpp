@@ -75,7 +75,7 @@ void Particle::update(float dt)
     dy = m_vy * dt;
     translate(dx, dy);
     //cout << "dx " << dx << endl;
-    cout << "center " << m_centerCoordinate.x << ", " << m_centerCoordinate.y << endl;
+    //cout << "center " << m_centerCoordinate.x << ", " << m_centerCoordinate.y << endl;
 }
 
 
